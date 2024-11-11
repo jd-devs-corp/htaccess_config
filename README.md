@@ -1,0 +1,1 @@
+## .htaccess config file
