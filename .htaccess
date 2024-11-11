@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Bloquer l'accès direct à toutes les routes dans /public/
+  RewriteRule ^public/ - [F,L]
+
+  # Rediriger toute requête qui commence par /public/* vers /
+  RewriteRule ^public/(.*)$ /$1 [R=301,L]
+
+  # Si la requête est à la racine et que c'est une route Laravel, la rediriger vers public/index.php
+  RewriteRule ^$ public/index.php [L]
+
+  # Routes qui ne sont pas dans /public/ doivent être traitées par Laravel
+  RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+
+  # Sécuriser l'accès au fichier .env
+  <Files .env>
+    Order allow,deny
+    Deny from all
+  </Files>
+
+  # Sécuriser l'accès aux fichiers cachés (commençant par un point)
+  RewriteRule (^\.|/\.) - [F]
+</IfModule>
+
